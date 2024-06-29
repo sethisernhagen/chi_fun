@@ -25,9 +25,8 @@ var userPaths = chioas.Path{
 		http.MethodGet: {
 			Comment:     "Some comment about getting users",
 			Handler:     (*api).GetUsers,
-			Summary:     "search",
-			Description: "some description",
-			OperationId: "getUsers",
+			Description: "Search the collection of all users",
+			OperationId: "search",
 			QueryParams: []chioas.QueryParam{
 				{
 					Name:        "status",
@@ -37,9 +36,8 @@ var userPaths = chioas.Path{
 			},
 			Responses: map[int]chioas.Response{
 				http.StatusOK: {
-					Description: "some response description",
-					IsArray:     true,
-					SchemaRef:   "User",
+					IsArray: true,
+					Schema:  UserResponse{},
 				},
 			},
 		},
@@ -50,12 +48,11 @@ var userPaths = chioas.Path{
 			OperationId: "create",
 			Request: &chioas.Request{
 				Description: "User to be added to the store",
-				SchemaRef:   "User",
+				Schema:      UserResponse{},
 			},
 			Responses: map[int]chioas.Response{
 				http.StatusCreated: {
-					Description: "SOme response description",
-					SchemaRef:   "User",
+					Schema: UserResponse{},
 				},
 			},
 		},
@@ -76,8 +73,7 @@ var userPaths = chioas.Path{
 					OperationId: "retrieve",
 					Responses: chioas.Responses{
 						http.StatusOK: {
-							Description: "some path method response description for retrieving a User",
-							SchemaRef:   "User",
+							Schema: UserResponse{},
 						},
 					},
 				},
@@ -90,12 +86,11 @@ var userPaths = chioas.Path{
 					Request: &chioas.Request{
 						Description: "Update an existent user in the store",
 						// TODO: figure out how to have a new UpdateUser schema
-						SchemaRef: "User",
+						Schema: UserResponse{},
 					},
 					Responses: chioas.Responses{
 						http.StatusOK: {
-							Description: "some path method response description for updating a User",
-							SchemaRef:   "User",
+							Schema: UserResponse{},
 						},
 					},
 				},

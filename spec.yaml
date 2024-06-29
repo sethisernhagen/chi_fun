@@ -1,0 +1,78 @@
+openapi: "3.0.3"
+info:
+  title: "Chi Fun - OpenAPI 3.0"
+  description: "this is some definition description"
+  version: "0.1.0"
+tags:
+  - name: user
+    description: "definition user tag description"
+paths:
+  "/pets":
+    get:
+      #Some comment about getting users
+      summary: "SOme summary"
+      description: "some description"
+      operationId: getUsers
+      tags:
+        - user
+      parameters:
+        - name: status
+          description: "some query param description"
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/Status"
+      responses:
+        200:
+          description: "some response description"
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+components:
+  schemas:
+    "User":
+      #source: api.go:47
+      description: "User schema description"
+      type: object
+      required:
+        - name
+        - "last_name"
+      properties:
+        "id":
+          description: "The id of the user"
+          type: integer
+          example: 4
+        "name":
+          description: "The first name of the user"
+          type: string
+          example: Larry
+        "last_name":
+          description: "The last name of the user"
+          type: string
+          example: Smith
+        "category":
+          $ref: "#/components/schemas/Category"
+    "Category":
+      #source: api.go:56
+      description: "Category schema description"
+      type: object
+      properties:
+        "id":
+          description: "The id of the category"
+          type: integer
+          example: 9
+        "name":
+          # this is a comment in the spec
+          description: "The name of the category"
+          type: string
+          example: Student
+    "Status":
+      type: string
+      default: available
+      enum:
+        - available
+        - pending
+        - sold

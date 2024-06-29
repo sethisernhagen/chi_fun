@@ -49,9 +49,28 @@
                     }
                 },
                 "required": [
+                    "id",
                     "name",
                     "last_name"
                 ],
+                "type": "object"
+            },
+            "UserUpdate": {
+                "properties": {
+                    "category": {
+                        "$ref": "#/components/schemas/Category"
+                    },
+                    "last_name": {
+                        "description": "The last name of the user",
+                        "example": "Smith",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The first name of the user",
+                        "example": "Larry",
+                        "type": "string"
+                    }
+                },
                 "type": "object"
             }
         }
@@ -65,8 +84,8 @@
     "paths": {
         "/users": {
             "get": {
-                "description": "some description",
-                "operationId": "getUsers",
+                "description": "Search the collection of all users",
+                "operationId": "search",
                 "parameters": [
                     {
                         "description": "some query param description",
@@ -84,16 +103,220 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "$ref": "#/components/schemas/User"
+                                        "properties": {
+                                            "category": {
+                                                "type": "object"
+                                            },
+                                            "id": {
+                                                "example": "0",
+                                                "type": "integer"
+                                            },
+                                            "last_name": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "id",
+                                            "name",
+                                            "last_name",
+                                            "category"
+                                        ],
+                                        "type": "object"
                                     },
                                     "type": "array"
                                 }
                             }
                         },
-                        "description": "some response description"
+                        "description": "OK"
                     }
                 },
-                "summary": "SOme summary",
+                "tags": [
+                    "user"
+                ]
+            },
+            "post": {
+                "description": "some method desction for creating a User",
+                "operationId": "create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "category": {
+                                        "type": "object"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "last_name",
+                                    "category"
+                                ],
+                                "type": "object"
+                            }
+                        }
+                    },
+                    "description": "User to be added to the store",
+                    "required": "false"
+                },
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "category": {
+                                            "type": "object"
+                                        },
+                                        "id": {
+                                            "example": "0",
+                                            "type": "integer"
+                                        },
+                                        "last_name": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "last_name",
+                                        "category"
+                                    ],
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "Created"
+                    }
+                },
+                "tags": [
+                    "user"
+                ]
+            }
+        },
+        "/users/{userId}": {
+            "get": {
+                "description": "some description path method for retrieving a User",
+                "operationId": "retrieve",
+                "parameters": [
+                    {
+                        "description": "id of the User",
+                        "in": "path",
+                        "name": "userId",
+                        "required": "true",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "category": {
+                                            "type": "object"
+                                        },
+                                        "id": {
+                                            "example": "0",
+                                            "type": "integer"
+                                        },
+                                        "last_name": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "last_name",
+                                        "category"
+                                    ],
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    }
+                },
+                "summary": "retrieve",
+                "tags": [
+                    "user"
+                ]
+            },
+            "patch": {
+                "description": "some description path method for updating a User",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "description": "id of the User",
+                        "in": "path",
+                        "name": "userId",
+                        "required": "true",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserUpdate"
+                            }
+                        }
+                    },
+                    "description": "Update an existent user in the store",
+                    "required": "false"
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "category": {
+                                            "type": "object"
+                                        },
+                                        "id": {
+                                            "example": "0",
+                                            "type": "integer"
+                                        },
+                                        "last_name": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "last_name",
+                                        "category"
+                                    ],
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    }
+                },
+                "summary": "update",
                 "tags": [
                     "user"
                 ]

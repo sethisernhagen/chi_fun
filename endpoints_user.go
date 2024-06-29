@@ -7,9 +7,20 @@ import (
 	"github.com/go-andiamo/chioas"
 )
 
-type UserResponse struct {
-	Id        int          `json:"id" oas:"description:The id of the user,example"`
-	FirstName string       `json:"name" oas:"description:The first name of the user,required,example"`
+type UserCreate struct {
+	FirstName string       `json:"first_name" oas:"description:The first name of the user,required,example"`
+	LastName  string       `json:"last_name" oas:"description:The last name of the user,required,example"`
+	Category  UserCategory `json:"category" oas:"$ref:Category,required"`
+}
+
+type UserUpdate struct {
+	FirstName string       `json:"first_name" oas:"description:The first name of the user,example"`
+	LastName  string       `json:"last_name" oas:"description:The last name of the user,example"`
+	Category  UserCategory `json:"category" oas:"$ref:Category"`
+}
+type User struct {
+	Id        int          `json:"id" oas:"description:The id of the user,required,example"`
+	FirstName string       `json:"first_name" oas:"description:The first name of the user,required,example"`
 	LastName  string       `json:"last_name" oas:"description:The last name of the user,required,example"`
 	Category  UserCategory `json:"category" oas:"$ref:Category"`
 }
@@ -17,6 +28,11 @@ type UserResponse struct {
 type UserCategory struct {
 	Id   int    `json:"id" oas:"description:The id of the category,example"`
 	Name string `json:"name" oas:"description: The name of the category,example,# this is a comment in the spec"`
+}
+
+type UserList struct {
+	Cursor string `json:"cursor" oas:"required,example"`
+	Items  []User `json:"items" oas:"$ref:'User',required,example"`
 }
 
 var userPaths = chioas.Path{
@@ -36,23 +52,23 @@ var userPaths = chioas.Path{
 			},
 			Responses: map[int]chioas.Response{
 				http.StatusOK: {
-					IsArray: true,
-					Schema:  UserResponse{},
+					IsArray:   true,
+					SchemaRef: "UserList",
 				},
 			},
 		},
 		http.MethodPost: {
 			Comment:     "SOme comment about creating a User",
 			Handler:     (*api).GetUser,
-			Description: "some method desction for creating a User",
+			Description: "Create a new User",
 			OperationId: "create",
 			Request: &chioas.Request{
 				Description: "User to be added to the store",
-				Schema:      UserResponse{},
+				Schema:      UserCreate{},
 			},
 			Responses: map[int]chioas.Response{
 				http.StatusCreated: {
-					Schema: UserResponse{},
+					SchemaRef: "User",
 				},
 			},
 		},
@@ -73,7 +89,7 @@ var userPaths = chioas.Path{
 					OperationId: "retrieve",
 					Responses: chioas.Responses{
 						http.StatusOK: {
-							Schema: UserResponse{},
+							SchemaRef: "User",
 						},
 					},
 				},
@@ -85,12 +101,11 @@ var userPaths = chioas.Path{
 					OperationId: "update",
 					Request: &chioas.Request{
 						Description: "Update an existent user in the store",
-						// TODO: figure out how to have a new UpdateUser schema
-						Schema: UserResponse{},
+						SchemaRef:   "UserUpdate",
 					},
 					Responses: chioas.Responses{
 						http.StatusOK: {
-							Schema: UserResponse{},
+							SchemaRef: "User",
 						},
 					},
 				},

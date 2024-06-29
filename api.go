@@ -24,14 +24,12 @@ var apiDef = chioas.Definition{
 		AsJson:    true,
 	},
 	Info: chioas.Info{
-		Title:       "Chi Fun - OpenAPI 3.0",
-		Description: `this is some definition description`,
-		Version:     "0.1.0",
+		Title:   "Chi Fun",
+		Version: "0.1.0",
 	},
 	Tags: chioas.Tags{
 		{
-			Name:        "user",
-			Description: "definition user tag description",
+			Name: "user",
 		},
 	},
 	Paths: chioas.Paths{
@@ -46,7 +44,7 @@ var components = chioas.Components{
 			Name:        "User",
 			Description: "User schema description",
 			Comment:     chioas.SourceComment(),
-		}).Must(UserResponse{
+		}).Must(User{
 			Id:        4,
 			FirstName: "Larry",
 			LastName:  "Smith",
@@ -65,5 +63,17 @@ var components = chioas.Components{
 			Default: "available",
 			Enum:    []any{"available", "pending", "sold"},
 		},
+		(&chioas.Schema{
+			Name: "UserUpdate",
+		}).Must(UserUpdate{
+			FirstName: "Larry",
+			LastName:  "Smith",
+		}),
+		(&chioas.Schema{
+			Name: "UserList",
+		}).Must(UserList{
+			Cursor: "some cursor",
+			Items:  []User{{Id: 6, FirstName: "Larrs", LastName: "Smith"}},
+		}),
 	},
 }
